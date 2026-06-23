@@ -1,0 +1,2652 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Tooling Systems</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      /* Dark Theme (Default) */
+      --bg-dark: #060a0f;
+      --surface-dark: #0d1117;
+      --surface-2-dark: #161b22;
+      --surface-3-dark: #21262d;
+      --surface-hover-dark: #1c2128;
+      --border-dark: rgba(255, 255, 255, 0.08);
+      --border-mid-dark: rgba(255, 255, 255, 0.14);
+      --border-strong-dark: rgba(255, 255, 255, 0.22);
+      --text-dark: #e6edf3;
+      --text-muted-dark: #8b949e;
+      --text-subtle-dark: #484f58;
+      --accent-dark: #00d4aa;
+      --accent-dim-dark: rgba(0, 212, 170, 0.15);
+      --accent-glow-dark: rgba(0, 212, 170, 0.25);
+      --accent-2-dark: #7c3aed;
+      --accent-2-dim-dark: rgba(124, 58, 237, 0.15);
+      --shadow-sm-dark: 0 1px 3px rgba(0, 0, 0, 0.4);
+      --shadow-md-dark: 0 4px 16px rgba(0, 0, 0, 0.5);
+      --shadow-lg-dark: 0 12px 40px rgba(0, 0, 0, 0.6);
+      --shadow-xl-dark: 0 24px 80px rgba(0, 0, 0, 0.7);
+
+      /* Light Theme (Day Mode) */
+      --bg-light: #f4f6f9;
+      --surface-light: #ffffff;
+      --surface-2-light: #eef2f6;
+      --surface-3-light: #e2e8f0;
+      --surface-hover-light: #f1f5f9;
+      --border-light: rgba(15, 23, 42, 0.08);
+      --border-mid-light: rgba(15, 23, 42, 0.14);
+      --border-strong-light: rgba(15, 23, 42, 0.22);
+      --text-light: #0f172a;
+      --text-muted-light: #475569;
+      --text-subtle-light: #64748b;
+      --accent-light: #059669;
+      --accent-dim-light: rgba(5, 150, 105, 0.1);
+      --accent-glow-light: rgba(5, 150, 105, 0.18);
+      --accent-2-light: #6d28d9;
+      --accent-2-dim-light: rgba(109, 40, 217, 0.1);
+      --shadow-sm-light: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-md-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg-light: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-xl-light: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+      /* Main variable mappings - Dark by default */
+      --bg: var(--bg-dark);
+      --surface: var(--surface-dark);
+      --surface-2: var(--surface-2-dark);
+      --surface-3: var(--surface-3-dark);
+      --surface-hover: var(--surface-hover-dark);
+      --border: var(--border-dark);
+      --border-mid: var(--border-mid-dark);
+      --border-strong: var(--border-strong-dark);
+      --text: var(--text-dark);
+      --text-muted: var(--text-muted-dark);
+      --text-subtle: var(--text-subtle-dark);
+      --accent: var(--accent-dark);
+      --accent-dim: var(--accent-dim-dark);
+      --accent-glow: var(--accent-glow-dark);
+      --accent-2: var(--accent-2-dark);
+      --accent-2-dim: var(--accent-2-dim-dark);
+      --shadow-sm: var(--shadow-sm-dark);
+      --shadow-md: var(--shadow-md-dark);
+      --shadow-lg: var(--shadow-lg-dark);
+      --shadow-xl: var(--shadow-xl-dark);
+
+      --danger: #f85149;
+      --danger-dim: rgba(248, 81, 73, 0.12);
+      --warn: #e3b341;
+      --warn-dim: rgba(227, 179, 65, 0.12);
+      --success: #3fb950;
+      --success-dim: rgba(63, 185, 80, 0.12);
+
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --radius-2xl: 32px;
+      --font: 'Inter', system-ui, sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    body.light-theme {
+      --bg: var(--bg-light);
+      --surface: var(--surface-light);
+      --surface-2: var(--surface-2-light);
+      --surface-3: var(--surface-3-light);
+      --surface-hover: var(--surface-hover-light);
+      --border: var(--border-light);
+      --border-mid: var(--border-mid-light);
+      --border-strong: var(--border-strong-light);
+      --text: var(--text-light);
+      --text-muted: var(--text-muted-light);
+      --text-subtle: var(--text-subtle-light);
+      --accent: var(--accent-light);
+      --accent-dim: var(--accent-dim-light);
+      --accent-glow: var(--accent-glow-light);
+      --accent-2: var(--accent-2-light);
+      --accent-2-dim: var(--accent-2-dim-light);
+      --shadow-sm: var(--shadow-sm-light);
+      --shadow-md: var(--shadow-md-light);
+      --shadow-lg: var(--shadow-lg-light);
+      --shadow-xl: var(--shadow-xl-light);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-size: 15px;
+      line-height: 1.6;
+      transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    header,
+    .tool-card,
+    footer,
+    .modal,
+    .popup-card,
+    td,
+    th,
+    input,
+    textarea,
+    select,
+    .btn,
+    .meta-card,
+    .customer-pill,
+    .attach-link,
+    .brand-logo {
+      transition: background 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--surface-3);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--border-mid);
+    }
+
+    /* ─── GRID BG ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.55;
+    }
+
+    #particleCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.85;
+      transition: opacity 0.4s;
+    }
+
+    /* ─── AMBIENT GLOWS ─── */
+    .ambient {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+      animation: pulse-ambient 8s ease-in-out infinite;
+    }
+
+    .ambient-1 {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(0, 212, 170, 0.06), transparent 70%);
+      top: -200px;
+      right: -100px;
+    }
+
+    .ambient-2 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(124, 58, 237, 0.06), transparent 70%);
+      bottom: -150px;
+      left: -100px;
+      animation-delay: -4s;
+    }
+
+    @keyframes pulse-ambient {
+
+      0%,
+      100% {
+        opacity: 0.6;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      position: relative;
+      z-index: 10;
+      padding: 0 2rem;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-mid);
+      background: rgba(6, 10, 15, 0.85);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      box-shadow: 0 1px 0 var(--border), 0 4px 24px rgba(0,0,0,0.18);
+    }
+
+    body.light-theme header {
+      background: rgba(255, 255, 255, 0.92);
+      border-bottom-color: var(--border-mid);
+      box-shadow: 0 1px 0 var(--border-mid), 0 4px 20px rgba(15, 23, 42, 0.08);
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent) 0%, rgba(0, 212, 170, 0.55) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: 0 2px 12px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.2);
+    }
+
+    body.light-theme .brand-logo {
+      box-shadow: 0 2px 10px var(--accent-glow);
+    }
+
+    .brand-name {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    .brand-tag {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-top: 1px;
+    }
+
+    body.light-theme .brand-name {
+      color: var(--text-light);
+    }
+
+    body.light-theme .brand-tag {
+      color: var(--text-muted-light);
+    }
+
+    .header-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: var(--mono);
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      background: var(--surface-2);
+    }
+
+    body.light-theme .header-status {
+      background: var(--surface-2-light);
+      border-color: var(--border-mid-light);
+      color: var(--text-muted-light);
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: blink 2s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.3;
+      }
+    }
+
+    /* ─── HEADER CONTROLS ─── */
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-divider {
+      width: 1px;
+      height: 28px;
+      background: var(--border-mid);
+      flex-shrink: 0;
+    }
+
+    .theme-toggle-btn {
+      width: 54px;
+      height: 28px;
+      border-radius: 14px;
+      background: var(--surface-3);
+      border: 1px solid var(--border-mid);
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 7px;
+      transition: background 0.3s, border-color 0.3s;
+      user-select: none;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
+    }
+
+    body.light-theme .theme-toggle-btn {
+      background: var(--surface-3-light);
+      border-color: var(--border-mid-light);
+    }
+
+    .theme-toggle-btn .toggle-icon {
+      font-size: 11px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .theme-toggle-btn .toggle-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent);
+      position: absolute;
+      left: 2px;
+      transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s;
+      z-index: 1;
+      box-shadow: 0 0 8px var(--accent-glow);
+    }
+
+    body.light-theme .theme-toggle-btn .toggle-thumb {
+      left: 28px;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border: 1px solid var(--border-mid);
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-dim);
+      margin-bottom: 2rem;
+      animation: slide-up 0.6s ease both;
+    }
+
+    .hero-title {
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      margin-bottom: 1.25rem;
+      animation: slide-up 0.6s ease 0.1s both;
+      color: var(--text);
+    }
+
+    .hero-title span {
+      color: inherit;
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin: 0 auto 3rem;
+      line-height: 1.7;
+      font-weight: 400;
+      animation: slide-up 0.6s ease 0.2s both;
+    }
+
+    @keyframes slide-up {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ─── STATS ROW ─── */
+    .stats-row {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      max-width: 480px;
+      margin: 0 auto 4rem;
+      animation: slide-up 0.6s ease 0.3s both;
+    }
+
+    .stat-item {
+      flex: 1;
+      padding: 1rem 1.5rem;
+      text-align: center;
+      border-right: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .stat-item:last-child {
+      border-right: none;
+    }
+
+    .stat-val {
+      font-size: 1.5rem;
+      font-weight: 700;
+      font-family: var(--mono);
+      color: var(--accent);
+      letter-spacing: -0.03em;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    /* ─── CARD GRID ─── */
+    .cards-section {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem 6rem;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 20px;
+      perspective: 1000px;
+    }
+
+    .tool-card {
+      position: relative;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      background: var(--surface);
+      cursor: pointer;
+      overflow: hidden;
+      transform-style: preserve-3d;
+      transition: border-color 0.3s ease, transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease;
+      animation: slide-up 0.6s ease both;
+    }
+
+    .tool-card:nth-child(1) {
+      animation-delay: 0.35s;
+    }
+
+    .tool-card:nth-child(2) {
+      animation-delay: 0.45s;
+    }
+
+    .tool-card * {
+      transform-style: preserve-3d;
+    }
+
+    .card-icon-wrap,
+    .card-badge {
+      transform: translateZ(32px);
+    }
+
+    .card-title {
+      transform: translateZ(24px);
+    }
+
+    .card-desc {
+      transform: translateZ(16px);
+    }
+
+    .card-cta {
+      transform: translateZ(10px);
+    }
+
+    .tool-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .tool-card:nth-child(1)::before {
+      background: radial-gradient(circle at 30% 30%, rgba(0, 212, 170, 0.08), transparent 60%);
+    }
+
+    .tool-card:nth-child(2)::before {
+      background: radial-gradient(circle at 30% 30%, rgba(124, 58, 237, 0.08), transparent 60%);
+    }
+
+    .tool-card:hover {
+      border-color: var(--border-mid);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .tool-card:hover::before {
+      opacity: 1;
+    }
+
+    .tool-card-glow {
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      filter: blur(50px);
+      top: -60px;
+      right: -60px;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+
+    .tool-card:nth-child(1) .tool-card-glow {
+      background: rgba(0, 212, 170, 0.2);
+    }
+
+    .tool-card:nth-child(2) .tool-card-glow {
+      background: rgba(124, 58, 237, 0.2);
+    }
+
+    .tool-card:hover .tool-card-glow {
+      opacity: 1;
+    }
+
+    .card-icon-wrap {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border);
+      font-size: 24px;
+      background: var(--surface-2);
+      transition: transform 0.3s ease;
+    }
+
+    .tool-card:hover .card-icon-wrap {
+      transform: scale(1.08);
+    }
+
+    .card-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.6rem;
+    }
+
+    .card-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 1.75rem;
+    }
+
+    .card-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.6rem 1rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-mid);
+      background: var(--surface-2);
+      color: var(--text-muted);
+      transition: all 0.2s ease;
+    }
+
+    .tool-card:hover .card-cta {
+      border-color: var(--border-strong);
+      color: var(--text);
+    }
+
+    .card-cta-arrow {
+      display: inline-block;
+      transition: transform 0.2s ease;
+    }
+
+    .tool-card:hover .card-cta-arrow {
+      transform: translateX(3px);
+    }
+
+    .card-badge {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 99px;
+    }
+
+    .badge-proto {
+      background: var(--accent-dim);
+      color: var(--accent);
+      border: 1px solid rgba(0, 212, 170, 0.2);
+    }
+
+    .badge-tool {
+      background: var(--accent-2-dim);
+      color: #a78bfa;
+      border: 1px solid rgba(124, 58, 237, 0.2);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      color: var(--text-subtle);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-family: var(--mono);
+    }
+
+    /* ─── MODAL OVERLAY ─── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      animation: fade-in 0.2s ease;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes modal-in {
+      from {
+        opacity: 0;
+        transform: scale(0.96) translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .modal {
+      width: calc(100vw - 24px);
+      height: calc(100vh - 24px);
+      background: var(--surface);
+      border: 1px solid var(--border-mid);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-xl);
+      animation: modal-in 0.3s ease;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.25rem 1.75rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-2);
+      flex-shrink: 0;
+    }
+
+    .modal-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .modal-header-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-sm);
+      background: var(--accent-dim);
+      border: 1px solid rgba(0, 212, 170, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .modal-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .modal-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: var(--mono);
+    }
+
+    .modal-close {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .modal-close:hover {
+      border-color: var(--border-mid);
+      background: var(--surface-3);
+      color: var(--text);
+    }
+
+    .modal-body {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      overflow: hidden;
+    }
+
+    /* ─── DASHBOARD VIEW ─── */
+    #dashboardView {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+      padding: 1.5rem;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .dash-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .dash-search-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex: 1;
+      max-width: 440px;
+    }
+
+    .search-input-wrap {
+      position: relative;
+      flex: 1;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-subtle);
+      font-size: 14px;
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.65rem 1rem 0.65rem 2.4rem;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .search-input::placeholder {
+      color: var(--text-subtle);
+    }
+
+    .search-input:focus {
+      border-color: rgba(0, 212, 170, 0.3);
+      box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.08);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0.65rem 1.1rem;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      letter-spacing: 0.01em;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg);
+      border-color: var(--accent);
+    }
+
+    .btn-primary:hover {
+      background: rgba(0, 212, 170, 0.85);
+      box-shadow: 0 4px 16px rgba(0, 212, 170, 0.2);
+    }
+
+    .btn-secondary {
+      background: var(--surface-2);
+      color: var(--text-muted);
+      border-color: var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--surface-3);
+      border-color: var(--border-mid);
+      color: var(--text);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-muted);
+      border-color: var(--border);
+    }
+
+    .btn-ghost:hover {
+      background: var(--surface-2);
+      border-color: var(--border-mid);
+      color: var(--text);
+    }
+
+    .btn-danger {
+      background: var(--danger-dim);
+      color: var(--danger);
+      border-color: rgba(248, 81, 73, 0.2);
+    }
+
+    .btn-danger:hover {
+      background: rgba(248, 81, 73, 0.2);
+    }
+
+    .btn-sm {
+      padding: 0.4rem 0.75rem;
+      font-size: 12px;
+      border-radius: var(--radius-sm);
+    }
+
+    .dash-actions {
+      display: flex;
+      gap: 0.6rem;
+    }
+
+    .table-wrap {
+      flex: 1;
+      min-height: 0;
+      overflow: auto;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+    }
+
+    .records-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 780px;
+      font-size: 13.5px;
+    }
+
+    .records-table thead th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      padding: 0.9rem 1.1rem;
+      text-align: left;
+      background: var(--surface-2);
+      border-bottom: 1px solid var(--border);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .records-table tbody td {
+      padding: 0.85rem 1.1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: middle;
+    }
+
+    .records-table tbody tr {
+      transition: background 0.15s ease;
+    }
+
+    .records-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .records-table tbody tr:hover td {
+      background: var(--surface-hover);
+    }
+
+    .mono-val {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--accent);
+      padding: 2px 6px;
+      background: var(--accent-dim);
+      border-radius: 4px;
+    }
+
+    .customer-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 500;
+      background: var(--surface-3);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    .attach-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      transition: all 0.15s ease;
+      max-width: 130px;
+    }
+
+    .attach-link:hover {
+      color: var(--text);
+      border-color: var(--border-mid);
+      background: var(--surface-3);
+    }
+
+    .attach-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .action-btns {
+      display: flex;
+      gap: 5px;
+      justify-content: flex-end;
+    }
+
+    .empty-row td {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-subtle);
+      font-size: 13px;
+    }
+
+    mark {
+      background: rgba(227, 179, 65, 0.25);
+      color: var(--warn);
+      border-radius: 3px;
+      padding: 0 2px;
+    }
+
+    /* ─── POPUP ─── */
+    .popup-overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 1400;
+      padding: 12px;
+      animation: fade-in 0.2s ease;
+    }
+
+    .popup-overlay.open {
+      display: flex;
+    }
+
+    .popup-card {
+      width: calc(100vw - 24px);
+      height: calc(100vh - 24px);
+      background: var(--surface);
+      border: 1px solid var(--border-mid);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      animation: modal-in 0.3s ease;
+    }
+
+    .popup-inner {
+      flex: 1;
+      min-height: 0;
+      overflow: auto;
+      padding: 2rem;
+    }
+
+    .form-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.75rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .form-group label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      padding: 0.7rem 0.9rem;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: var(--text-subtle);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: rgba(0, 212, 170, 0.3);
+      box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.08);
+    }
+
+    .form-group input[type="file"] {
+      padding: 0.5rem 0.75rem;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .form-group textarea {
+      min-height: 88px;
+      resize: vertical;
+    }
+
+    .form-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .form-footer-left {
+      margin-right: auto;
+    }
+
+    /* Existing attachments inside forms */
+    .existing-attachments-group {
+      display: none;
+    }
+
+    .attach-edit-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .remove-attach-btn {
+      background: none;
+      border: none;
+      color: var(--danger);
+      cursor: pointer;
+      font-size: 13px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    /* ─── VIEW RECORD ─── */
+    .view-record-layout {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: 0;
+    }
+
+    .view-record-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .view-record-meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .meta-card {
+      padding: 0.85rem 1rem;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+    }
+
+    .meta-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-subtle);
+      margin-bottom: 4px;
+    }
+
+    .meta-val {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .view-record-attachments {
+      margin-bottom: 1.5rem;
+    }
+
+    .attach-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .details-section {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .details-section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+
+    .details-section-title h4 {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .details-table-wrap {
+      flex: 1;
+      min-height: 160px;
+      overflow: auto;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface-2);
+    }
+
+    /* Search box view */
+    .search-view-box {
+      max-width: 420px;
+      margin: 2rem auto;
+    }
+
+    .search-view-box h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .search-row-inputs {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .search-message {
+      margin-top: 0.75rem;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .search-message.error {
+      color: var(--danger);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .modal-view {
+      display: none;
+      flex: 1;
+      min-height: 0;
+      flex-direction: column;
+    }
+
+    .modal-view.active {
+      display: flex;
+    }
+
+    /* tooltip/date display */
+    .date-chip {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-subtle);
+    }
+
+    /* loading spinner */
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .spinner {
+      display: inline-block;
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid var(--border-mid);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+
+  </style>
+</head>
+
+<body>
+
+  <canvas id="particleCanvas"></canvas>
+  <div class="ambient ambient-1"></div>
+  <div class="ambient ambient-2"></div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-brand">
+      <div class="brand-logo">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="6" width="10" height="10" rx="2" fill="currentColor" opacity="0.9"/>
+          <rect x="13" y="1" width="8" height="8" rx="1.5" fill="currentColor" opacity="0.7"/>
+          <rect x="13" y="13" width="8" height="8" rx="1.5" fill="currentColor" opacity="0.55"/>
+          <line x1="11" y1="11" x2="13" y2="5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
+          <line x1="11" y1="11" x2="13" y2="17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-name">Dynamic Tooling Systems</div>
+        <div class="brand-tag">Manufacturing Intelligence Platform</div>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <div class="header-controls">
+        <div class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Theme">
+          <span class="toggle-icon">🌙</span>
+          <span class="toggle-icon">☀️</span>
+          <div class="toggle-thumb"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1 class="hero-title">
+      DYNAMIC TOOLING SYSTEM'S RM MANAGEMENT
+    </h1>
+  </section>
+
+  <!-- CARDS -->
+  <section class="cards-section">
+    <div class="cards-grid">
+      <div class="tool-card" onclick="openModal('PROTO RM')">
+        <div class="tool-card-glow"></div>
+        <span class="card-badge badge-proto">Active</span>
+        <div class="card-icon-wrap">⚙️</div>
+        <div class="card-title">PROTO RM</div>
+        <div class="card-cta">Open dashboard <span class="card-cta-arrow">→</span></div>
+      </div>
+      <div class="tool-card" onclick="openModal('TOOL RM')">
+        <div class="tool-card-glow"></div>
+        <span class="card-badge badge-tool">Active</span>
+        <div class="card-icon-wrap">🔧</div>
+        <div class="card-title">TOOL RM</div>
+        <div class="card-cta">Open dashboard <span class="card-cta-arrow">→</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>© 2026 Dynamic Tooling Systems · Built for efficient manufacturing workflows</footer>
+
+  <!-- ─── MAIN MODAL ─── -->
+  <div class="modal-overlay" id="toolModal" onclick="closeModalOnOverlay(event)">
+    <div class="modal" role="dialog" aria-modal="true">
+
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <div class="modal-header-icon" id="modalIcon">⚙️</div>
+          <div>
+            <div class="modal-title" id="modalTitle"></div>
+            <div class="modal-subtitle" id="modalSubtitle">Record management system</div>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div id="dashboardView"
+          style="display:flex;flex-direction:column;flex:1;min-height:0;padding:1.25rem;gap:1rem;">
+
+          <div class="dash-top">
+            <div class="dash-search-wrap">
+              <div class="search-input-wrap">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" id="tableSearchInput" placeholder="Search any field…"
+                  oninput="searchRecords()">
+              </div>
+            </div>
+            <div class="dash-actions">
+              <button class="btn btn-secondary" onclick="handleAction('Report')">↓ Export CSV</button>
+              <button class="btn btn-primary" onclick="showCreateForm()">+ Create</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="records-table" id="mainTable">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Tool No</th>
+                  <th>Part Description</th>
+                  <th>Tool Description</th>
+                  <th>Customer</th>
+                  <th>Attachments</th>
+                  <th style="text-align:right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="modalTableBody"></tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── POPUP ─── -->
+    <div class="popup-overlay hidden" id="actionPopup" onclick="closePopupOnOverlay(event)">
+      <div class="popup-card" onclick="event.stopPropagation()">
+
+        <!-- Create Form -->
+        <div class="modal-view hidden" id="createView">
+          <div class="popup-inner">
+            <div class="form-title" id="createFormTitle">Create Record</div>
+            <form id="createForm" onsubmit="submitCreate(event)">
+              <div class="form-grid" id="createFormFields"></div>
+              <div class="form-footer">
+                <button type="button" class="btn btn-ghost" onclick="hideActionPopup()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Record</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Edit Form -->
+        <div class="modal-view hidden" id="editView">
+          <div class="popup-inner">
+            <div class="form-title" id="editFormTitle">Edit Record</div>
+            <form id="editForm" onsubmit="submitEdit(event)">
+              <div class="form-grid" id="editFormFields"></div>
+              <div class="form-footer">
+                <div class="form-footer-left">
+                  <button type="button" class="btn btn-danger" onclick="deleteEditedRecord()">Delete</button>
+                </div>
+                <button type="button" class="btn btn-ghost" onclick="hideActionPopup()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Update</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- View Record -->
+        <div class="modal-view hidden" id="viewRecordView">
+          <div class="popup-inner" style="display:flex;flex-direction:column;height:100%;">
+            <div class="view-record-header">
+              <div>
+                <div class="form-title" id="viewRecordTitle"
+                  style="margin-bottom:0;border-bottom:none;padding-bottom:0;"></div>
+              </div>
+              <div style="display:flex;gap:0.6rem;flex-wrap:wrap;">
+                <button class="btn btn-ghost" onclick="downloadCurrentRecord()">↓ Download</button>
+                <button class="btn btn-primary" onclick="showCreateDetailForm()">+ Add Part Detail</button>
+                <button class="btn btn-ghost" onclick="hideActionPopup()">Close</button>
+              </div>
+            </div>
+
+            <div class="view-record-meta" id="viewRecordMeta"></div>
+            <div class="view-record-attachments" id="viewRecordAttachments"></div>
+
+            <div class="details-section">
+              <div class="details-section-title">
+                <h4>Part Details</h4>
+              </div>
+              <div class="details-table-wrap">
+                <table class="records-table">
+                  <thead>
+                    <tr>
+                      <th>Part No</th>
+                      <th>Part Description</th>
+                      <th>RM Size</th>
+                      <th>Material</th>
+                      <th>Qty</th>
+                      <th>Supplier</th>
+                      <th>Attachments</th>
+                      <th style="text-align:right;">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="detailsTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Create Detail -->
+        <div class="modal-view hidden" id="createDetailView">
+          <div class="popup-inner">
+            <div class="form-title">Add Part Detail</div>
+            <form id="createDetailForm" onsubmit="submitCreateDetail(event)">
+              <div class="form-grid">
+                <div class="form-group"><label>Part No</label><input type="text" name="partNo"
+                    placeholder="e.g. PT-0042" required></div>
+                <div class="form-group"><label>Material</label><input type="text" name="material"
+                    placeholder="e.g. EN24 Steel" required></div>
+                <div class="form-group"><label>RM Size</label><input type="text" name="size" placeholder="e.g. 50×80mm"
+                    required></div>
+                <div class="form-group"><label>Qty</label><input type="number" name="qty" placeholder="1" required>
+                </div>
+                <div class="form-group"><label>Supplier Name</label><input type="text" name="supplierName"
+                    placeholder="Supplier" required></div>
+                <div class="form-group full-width"><label>Part Description</label><textarea name="description"
+                    placeholder="Describe the part…" required></textarea></div>
+                <div class="form-group full-width"><label>Attach Documents</label><input type="file" name="attachments"
+                    multiple></div>
+              </div>
+              <div class="form-footer">
+                <button type="button" class="btn btn-ghost" onclick="viewRecord(selectedRecordId)">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Detail</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Edit Detail -->
+        <div class="modal-view hidden" id="editDetailView">
+          <div class="popup-inner">
+            <div class="form-title">Edit Part Detail</div>
+            <form id="editDetailForm" onsubmit="submitEditDetail(event)">
+              <input type="hidden" name="detailId">
+              <div class="form-grid">
+                <div class="form-group"><label>Part No</label><input type="text" name="partNo" required></div>
+                <div class="form-group"><label>Material</label><input type="text" name="material" required></div>
+                <div class="form-group"><label>RM Size</label><input type="text" name="size" required></div>
+                <div class="form-group"><label>Qty</label><input type="number" name="qty" required></div>
+                <div class="form-group"><label>Supplier Name</label><input type="text" name="supplierName" required>
+                </div>
+                <div class="form-group full-width"><label>Part Description</label><textarea name="description"
+                    required></textarea></div>
+                <div class="form-group full-width"><label>Add More Documents</label><input type="file"
+                    name="attachments" multiple></div>
+                <div class="form-group full-width existing-attachments-group" id="existingDetailAttachmentsGroup">
+                  <label id="existingDetailAttachmentsCountLabel">Existing Attachments</label>
+                  <div class="attach-row" id="editDetailFormExistingAttachments"></div>
+                </div>
+              </div>
+              <div class="form-footer">
+                <button type="button" class="btn btn-ghost" onclick="viewRecord(selectedRecordId)">Cancel</button>
+                <button type="submit" class="btn btn-primary">Update Detail</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Edit Search fallback -->
+        <div class="modal-view hidden" id="editSearchView">
+          <div class="popup-inner">
+            <div class="search-view-box">
+              <h3>Search by Tool No</h3>
+              <div class="search-row-inputs">
+                <input class="search-input" type="text" id="editSearchInput" placeholder="Tool number…">
+                <button class="btn btn-primary" onclick="searchForEdit()">Search</button>
+              </div>
+              <div class="search-message" id="editSearchMessage"></div>
+              <div style="margin-top:1rem;text-align:right;"><button class="btn btn-ghost"
+                  onclick="hideActionPopup()">Cancel</button></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delete fallback -->
+        <div class="modal-view hidden" id="deleteView">
+          <div class="popup-inner">
+            <div class="search-view-box">
+              <h3>Delete by Tool No</h3>
+              <div class="search-row-inputs">
+                <input class="search-input" type="text" id="deleteInput" placeholder="Tool number…">
+                <button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+              </div>
+              <div class="search-message" id="deleteMessage"></div>
+              <div style="margin-top:1rem;text-align:right;"><button class="btn btn-ghost"
+                  onclick="hideActionPopup()">Cancel</button></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCtSeGScmbouzWlWqbxLnsHq7tHw6iIwfI",
+      authDomain: "dtsdatabase-cc5e2.firebaseapp.com",
+      projectId: "dtsdatabase-cc5e2",
+      storageBucket: "dtsdatabase-cc5e2.firebasestorage.app",
+      messagingSenderId: "725454367732",
+      appId: "1:725454367732:web:611b789dd764476c2527a1",
+      measurementId: "G-31YD6DRZ0W"
+    };
+
+    try {
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+      const storage = getStorage(app);
+      window.firebaseApp = app;
+      window.firebaseFirestore = { db, collection, doc, setDoc, deleteDoc, onSnapshot, serverTimestamp };
+      window.firebaseStorage = { storage, ref, uploadBytes, getDownloadURL };
+      window.dispatchEvent(new Event('firebase-ready'));
+    } catch (e) {
+      console.warn("Firebase init failed, falling back to localStorage.", e);
+      window.dispatchEvent(new Event('firebase-ready'));
+    }
+  </script>
+
+  <script>
+    // ─── CONSTANTS & STATE ───
+    const TOOLS = ['PROTO RM', 'TOOL RM'];
+    const STORAGE_KEY = 'dts_records';
+    let activeTool = null, editingRecordId = null, selectedRecordId = null, tableFilterText = '';
+    let realtimeUnsubscribers = {};
+    let realtimeSyncStarted = false;
+    // live in-memory store so UI never waits on localStorage reads in hot paths
+    let memStore = { 'PROTO RM': [], 'TOOL RM': [] };
+
+    // ─── FUTURISTIC SFX & THEME ENGINE ───
+    let audioEnabled = false;
+    let audioCtx = null;
+
+    function initAudioCtx() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    window.playSound = function (type) {
+      if (!audioEnabled) return;
+      try {
+        initAudioCtx();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
+        if (type === 'click') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(1000, now);
+          osc.frequency.exponentialRampToValueAtTime(500, now + 0.06);
+          gain.gain.setValueAtTime(0.06, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+          osc.start(now); osc.stop(now + 0.06);
+        } else if (type === 'hover') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(1500, now);
+          gain.gain.setValueAtTime(0.015, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+          osc.start(now); osc.stop(now + 0.03);
+        } else if (type === 'success') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(523.25, now); // C5
+          osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
+          osc.frequency.setValueAtTime(783.99, now + 0.16); // G5
+          gain.gain.setValueAtTime(0.05, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+          osc.start(now); osc.stop(now + 0.3);
+        } else if (type === 'error') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(130.81, now); // C3
+          osc.frequency.linearRampToValueAtTime(80, now + 0.25);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+          osc.start(now); osc.stop(now + 0.25);
+        } else if (type === 'transition') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(220, now);
+          osc.frequency.exponentialRampToValueAtTime(880, now + 0.2);
+          gain.gain.setValueAtTime(0.04, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+          osc.start(now); osc.stop(now + 0.2);
+        }
+      } catch (e) { }
+    };
+
+    window.toggleAudio = function () {
+      audioEnabled = !audioEnabled;
+      hudLog("SYSTEM", audioEnabled ? "Audio feedback module activated." : "Audio feedback module deactivated.");
+      localStorage.setItem('dts_audio', audioEnabled ? '1' : '0');
+    };
+
+    window.toggleTheme = function () {
+      const isLight = document.body.classList.toggle('light-theme');
+      localStorage.setItem('dts_theme', isLight ? 'light' : 'dark');
+      playSound('transition');
+      hudLog("SYSTEM", `Theme toggled to ${isLight ? 'DAY (Light)' : 'NIGHT (Dark)'} mode.`);
+    };
+
+
+
+    // ─── SPEECH SYNTHESIS ASSISTANT ───
+    window.speakVoice = function (text) {
+      if (!audioEnabled || !('speechSynthesis' in window)) return;
+      try {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 1.05;
+        utterance.pitch = 0.95;
+        const voices = window.speechSynthesis.getVoices();
+        const preferredVoice = voices.find(v => v.lang.includes('en') && (v.name.includes('Female') || v.name.includes('Zira') || v.name.includes('Natural') || v.name.includes('Google')));
+        if (preferredVoice) utterance.voice = preferredVoice;
+        window.speechSynthesis.speak(utterance);
+      } catch (e) { }
+    };
+
+    // ─── VOICE RECOGNITION HUD CONTROLLER ───
+    let recognition = null;
+    let voiceActive = false;
+
+    window.toggleVoiceRecognition = function () {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        hudLog("ERROR", "Speech recognition API not supported by browser environment.");
+        return;
+      }
+
+      if (!recognition) {
+        recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = false;
+        recognition.lang = 'en-US';
+
+        recognition.onstart = () => {
+          voiceActive = true;
+          hudLog("SYSTEM", "Voice Recognition listener activated. Speak now.");
+        };
+
+        recognition.onerror = (event) => {
+          console.error("Speech Recognition Error:", event.error);
+          hudLog("ERROR", `Voice recognition error: ${event.error}`);
+        };
+
+        recognition.onend = () => {
+          voiceActive = false;
+          hudLog("SYSTEM", "Voice Recognition listener stopped.");
+        };
+
+        recognition.onresult = (event) => {
+          const lastResult = event.results[event.results.length - 1];
+          if (lastResult.isFinal) {
+            const command = lastResult[0].transcript.trim().toLowerCase();
+            hudLog("SYSTEM", `Voice Command Detected: "${command}"`);
+            handleVoiceCommand(command);
+          }
+        };
+      }
+
+      if (voiceActive) {
+        recognition.stop();
+      } else {
+        initAudioCtx();
+        recognition.start();
+      }
+    };
+
+    function handleVoiceCommand(command) {
+      if (command.includes('open proto') || command.includes('open prototype')) {
+        openModal('PROTO RM');
+      } else if (command.includes('open tool') || command.includes('open production')) {
+        openModal('TOOL RM');
+      } else if (command.includes('close dashboard') || command.includes('close registry') || command.includes('close screen') || command.includes('exit') || command.includes('close')) {
+        closeModal();
+        hideActionPopup();
+      } else if (command.includes('toggle theme') || command.includes('change theme') || command.includes('day mode') || command.includes('night mode') || command.includes('light mode') || command.includes('dark mode')) {
+        toggleTheme();
+      } else if (command.includes('export') || command.includes('download report') || command.includes('export csv')) {
+        if (activeTool) {
+          downloadReport();
+        } else {
+          hudLog("ERROR", "No active panel selected for report export.");
+          speakVoice("Export failed, no active panel");
+        }
+      } else if (command.includes('create record') || command.includes('add record') || command.includes('new record')) {
+        if (activeTool) {
+          showCreateForm();
+        } else {
+          hudLog("ERROR", "Access registry first to create a record.");
+        }
+      } else if (command.includes('help') || command.includes('commands')) {
+        hudLog("SYSTEM", "Supported voice commands: 'open proto', 'open tool', 'close', 'toggle theme', 'export', 'create record', 'mute audio'.");
+        speakVoice("Supported command list displayed");
+      } else if (command.includes('mute audio') || command.includes('disable sound') || command.includes('disable audio') || command.includes('mute sound')) {
+        toggleAudio();
+      } else {
+        speakVoice("Command not recognized");
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'v') {
+        e.preventDefault();
+        toggleVoiceRecognition();
+      }
+    });
+
+    function initThemeAndAudio() {
+      // Theme
+      const storedTheme = localStorage.getItem('dts_theme');
+      if (storedTheme === 'light') {
+        document.body.classList.add('light-theme');
+      }
+      // Audio state kept silent (buttons removed from UI)
+      const storedAudio = localStorage.getItem('dts_audio');
+      audioEnabled = (storedAudio === '1');
+    }
+
+    // hudLog is a no-op — telemetry terminal removed
+    window.hudLog = function () {};
+
+    window.attachSFXListeners = function () {
+      document.querySelectorAll('.btn, .tool-card, .modal-close, .theme-toggle-btn, .attach-link, .modal-header button, .form-footer button').forEach(el => {
+        if (el.dataset.sfxAttached) return;
+        el.dataset.sfxAttached = '1';
+        el.addEventListener('mouseenter', () => playSound('hover'));
+        el.addEventListener('click', () => playSound('click'));
+      });
+    };
+
+    // ─── INTERACTIVE PARTICLE SYSTEM ───
+    function initParticleSystem() {
+      const canvas = document.getElementById('particleCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width = (canvas.width = window.innerWidth);
+      let height = (canvas.height = window.innerHeight);
+      const particles = [];
+      const maxParticles = 60;
+      const connectionDist = 125;
+      let mouse = { x: null, y: null, radius: 160 };
+
+      window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+      });
+
+      window.addEventListener('mouseleave', () => {
+        mouse.x = null;
+        mouse.y = null;
+      });
+
+      class Particle {
+        constructor() {
+          this.x = Math.random() * width;
+          this.y = Math.random() * height;
+          this.vx = (Math.random() - 0.5) * 0.45;
+          this.vy = (Math.random() - 0.5) * 0.45;
+          this.radius = Math.random() * 2 + 1;
+        }
+        update() {
+          this.x += this.vx;
+          this.y += this.vy;
+
+          if (this.x < 0 || this.x > width) this.vx *= -1;
+          if (this.y < 0 || this.y > height) this.vy *= -1;
+
+          if (mouse.x !== null && mouse.y !== null) {
+            const dx = mouse.x - this.x;
+            const dy = mouse.y - this.y;
+            const dist = Math.hypot(dx, dy);
+            if (dist < mouse.radius) {
+              const force = (mouse.radius - dist) / mouse.radius;
+              this.x -= (dx / dist) * force * 0.4;
+              this.y -= (dy / dist) * force * 0.4;
+            }
+          }
+        }
+        draw() {
+          const accentColor = getComputedStyle(document.body).getPropertyValue('--accent').trim();
+          ctx.fillStyle = accentColor;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      for (let i = 0; i < maxParticles; i++) {
+        particles.push(new Particle());
+      }
+
+      function parseColorToRgb(colorStr) {
+        if (colorStr.startsWith('rgb')) {
+          const m = colorStr.match(/\d+/g);
+          if (m && m.length >= 3) return { r: parseInt(m[0]), g: parseInt(m[1]), b: parseInt(m[2]) };
+        }
+        const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+        const hex = colorStr.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) } : { r: 0, g: 212, b: 170 };
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, width, height);
+        const accentColor = getComputedStyle(document.body).getPropertyValue('--accent').trim();
+        const rgb = parseColorToRgb(accentColor);
+
+        for (let i = 0; i < particles.length; i++) {
+          const p1 = particles[i];
+          p1.update();
+          p1.draw();
+
+          for (let j = i + 1; j < particles.length; j++) {
+            const p2 = particles[j];
+            const dist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+            if (dist < connectionDist) {
+              const alpha = (1 - dist / connectionDist) * 0.12;
+              ctx.strokeStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
+              ctx.lineWidth = 0.8;
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+    }
+
+    // ─── 3D CARD HOVER TILT ───
+    function initCardTilt() {
+      const cards = document.querySelectorAll('.tool-card');
+      cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const xc = rect.width / 2;
+          const yc = rect.height / 2;
+          const dx = x - xc;
+          const dy = y - yc;
+          const tiltX = -(dy / yc) * 12;
+          const tiltY = (dx / xc) * 12;
+          card.style.transition = 'none';
+          card.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02)`;
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transition = 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease, border-color 0.3s ease';
+          card.style.transform = 'rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+        });
+      });
+    }
+
+    const hasLS = (() => { try { localStorage.setItem('_t', '1'); localStorage.removeItem('_t'); return true; } catch (e) { return false; } })();
+    const defaultRecords = { 'PROTO RM': [], 'TOOL RM': [] };
+
+    function uid() { return typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `id_${Date.now()}_${Math.random().toString(36).slice(2)}`; }
+    function escHTML(s) { return String(s ?? '').replace(/[&<>'"]/g, t => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[t] || t)); }
+    function escCSV(v) { return `"${String(v ?? '').replace(/"/g, '""')}"`; }
+
+    function normalizeDetail(d) {
+      return { ...d, id: d.id || uid(), date: d.date || '', partNo: d.partNo || '', description: d.description || '', material: d.material || '', size: d.size || '', qty: d.qty || '', supplierName: d.supplierName || '', attachments: Array.isArray(d.attachments) ? d.attachments : [] };
+    }
+    function normalizeRecord(r) {
+      return { ...r, id: r.id || uid(), toolDescription: r.toolDescription || '', attachments: Array.isArray(r.attachments) ? r.attachments : [], details: Array.isArray(r.details) ? r.details.map(normalizeDetail) : [], lastUpdated: r.lastUpdated || null };
+    }
+    function normalizeRecords(r) {
+      if (!r || typeof r !== 'object') return { ...defaultRecords };
+      return { 'PROTO RM': Array.isArray(r['PROTO RM']) ? r['PROTO RM'].map(normalizeRecord) : [], 'TOOL RM': Array.isArray(r['TOOL RM']) ? r['TOOL RM'].map(normalizeRecord) : [] };
+    }
+
+    function isFB() { return !!(window.firebaseFirestore?.db); }
+    function isFBStorage() { return !!(window.firebaseStorage?.storage); }
+
+    // loadRecords — always reads from in-memory store (instant, no I/O)
+    function loadRecords() {
+      return {
+        'PROTO RM': (memStore['PROTO RM'] || []).map(normalizeRecord),
+        'TOOL RM':  (memStore['TOOL RM']  || []).map(normalizeRecord),
+      };
+    }
+
+    // saveRecords — write optimistically to memStore + localStorage, then push to Firestore
+    // syncToDb: false means "this is a remote update already, don't echo back"
+    function saveRecords(records, syncToDb = true) {
+      TOOLS.forEach(t => { memStore[t] = (records[t] || []).map(normalizeRecord); });
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(memStore)); } catch (_) {}
+      // Firestore push is handled individually by caller (fbSave/fbDelete) to be granular
+    }
+
+    // ─── FIREBASE REALTIME SYNC ───
+    // Write a record to Firestore (fire-and-forget, non-blocking)
+    function fbSave(toolName, record) {
+      if (!isFB()) return;
+      const { db, doc, setDoc, serverTimestamp } = window.firebaseFirestore;
+      const nr = normalizeRecord(record);
+      setDoc(doc(db, toolName, nr.id), { ...nr, lastUpdated: serverTimestamp() })
+        .catch(e => console.warn('FB save:', e));
+    }
+
+    // Delete a record from Firestore (fire-and-forget)
+    function fbDelete(toolName, id) {
+      if (!isFB()) return;
+      const { db, doc, deleteDoc } = window.firebaseFirestore;
+      deleteDoc(doc(db, toolName, id)).catch(e => console.warn('FB delete:', e));
+    }
+
+    // Start persistent realtime listeners — one per collection.
+    // onSnapshot fires immediately with current data, then on EVERY change from any device.
+    function startRealtimeSync() {
+      if (!isFB() || realtimeSyncStarted) return;
+      if (!navigator.onLine) {
+        console.log('[SYNC] Offline mode - data will sync when online');
+        return;
+      }
+      realtimeSyncStarted = true;
+      const { db, collection, onSnapshot } = window.firebaseFirestore;
+      console.log('[SYNC] Real-time sync started for all collections');
+
+      TOOLS.forEach(toolName => {
+        realtimeUnsubscribers[toolName] = onSnapshot(
+          collection(db, toolName),
+          { includeMetadataChanges: false },
+          snap => {
+            // Build a fresh array from Firestore snapshot
+            const fbRecs = [];
+            snap.forEach(d => fbRecs.push(normalizeRecord({ id: d.id, ...d.data() })));
+
+            // Merge with local (keeps any optimistic records not yet acked by FB)
+            const local = memStore[toolName] || [];
+            const fbIds = new Set(fbRecs.map(r => r.id));
+            // Records only in local (pending optimistic write) stay; FB wins for everything else
+            const optimistic = local.filter(r => !fbIds.has(r.id));
+            memStore[toolName] = [...fbRecs, ...optimistic];
+
+            // Persist to localStorage
+            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(memStore)); } catch (_) {}
+
+            console.log(`[SYNC] ${toolName}: ${fbRecs.length} from server + ${optimistic.length} local`);
+
+            // Update UI immediately if this tool is open
+            if (activeTool === toolName) {
+              renderTable();
+              const viewOpen = !document.getElementById('viewRecordView').classList.contains('hidden');
+              if (selectedRecordId && viewOpen) {
+                // Re-check record still exists
+                const stillThere = memStore[toolName].find(r => r.id === selectedRecordId);
+                if (stillThere) viewRecord(selectedRecordId);
+                else { hideActionPopup(); }
+              }
+            }
+          },
+          err => console.warn(`[SYNC] Error on ${toolName}:`, err)
+        );
+      });
+    }
+
+    function init() {
+      initThemeAndAudio();
+      // Seed memStore from localStorage
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          TOOLS.forEach(t => { memStore[t] = (parsed[t] || []).map(normalizeRecord); });
+          console.log('[INIT] Loaded persisted data from localStorage');
+        }
+      } catch (e) {
+        console.warn('[INIT] localStorage error:', e);
+      }
+      attachSFXListeners();
+      initParticleSystem();
+      initCardTilt();
+      // Start realtime sync (idempotent — safe to call multiple times)
+      startRealtimeSync();
+      console.log('[INIT] DTS ready — live sync enabled across all devices');
+    }
+
+    async function uploadAttachments(toolName, recordId, files, existing = []) {
+      const list = Array.from(files || []).filter(f => f && f.name);
+      if (!list.length) return existing;
+      const toB64 = (f) => new Promise((res, rej) => { const r = new FileReader(); r.readAsDataURL(f); r.onload = () => res(r.result); r.onerror = rej; });
+      const timeout = (ms) => new Promise((_, rej) => setTimeout(() => rej(new Error("Timeout")), ms));
+      const uploaded = [];
+      for (const file of list) {
+        try {
+          if (isFBStorage()) {
+            const { storage, ref, uploadBytes, getDownloadURL } = window.firebaseStorage;
+            const safe = file.name.replace(/[^a-z0-9._-]+/gi, '_');
+            const path = `${toolName.replace(/\s+/g, '_')}/${recordId}/${Date.now()}_${safe}`;
+            const fRef = ref(storage, path);
+            const url = await Promise.race([(async () => { await uploadBytes(fRef, file); return await getDownloadURL(fRef); })(), timeout(4000)]);
+            uploaded.push({ name: file.name, type: file.type || 'application/octet-stream', size: file.size, path, url });
+          } else { throw new Error("No FB storage"); }
+        } catch (e) {
+          try { const b64 = await toB64(file); uploaded.push({ name: file.name, type: file.type || 'application/octet-stream', size: file.size, url: b64 }); }
+          catch (e2) { console.error("B64 fail:", e2); }
+        }
+      }
+      return [...existing, ...uploaded];
+    }
+
+    // ─── FORM HTML ───
+    const formFieldsHTML = `
+    <div class="form-group"><label>Date</label><input type="date" name="date" required></div>
+    <input type="hidden" name="recordId">
+    <div class="form-group"><label>Tool No</label><input type="text" name="partNo" placeholder="e.g. TL-0042" required></div>
+    <div class="form-group full-width"><label>Part Description</label><textarea name="description" placeholder="Describe the part…" required></textarea></div>
+    <div class="form-group full-width"><label>Tool Description</label><textarea name="toolDescription" placeholder="Describe the tool…" required></textarea></div>
+    <div class="form-group full-width"><label>Customer Name</label><input type="text" name="customerName" placeholder="Customer" required></div>
+    <div class="form-group full-width"><label>Attach Documents</label><input type="file" name="attachments" multiple></div>
+    <div class="form-group full-width existing-attachments-group" id="existingAttachmentsGroup">
+      <label id="existingAttachmentsCountLabel">Existing Attachments</label>
+      <div class="attach-row" id="editFormExistingAttachments"></div>
+    </div>
+  `;
+    document.getElementById('createFormFields').innerHTML = formFieldsHTML;
+    document.getElementById('editFormFields').innerHTML = formFieldsHTML;
+
+    // ─── MODAL ───
+    window.openModal = async function (toolName) {
+      activeTool = toolName;
+      document.getElementById('modalTitle').textContent = toolName + ' Dashboard';
+      document.getElementById('modalSubtitle').textContent = toolName === 'PROTO RM' ? 'Prototype raw material records' : 'Production tooling records';
+      document.getElementById('modalIcon').textContent = toolName === 'PROTO RM' ? '⚙️' : '🔧';
+      document.getElementById('toolModal').classList.add('open');
+      document.getElementById('tableSearchInput').value = '';
+      tableFilterText = '';
+      renderTable();
+    };
+
+    window.closeModal = function () { document.getElementById('toolModal').classList.remove('open'); activeTool = null; };
+    window.closeModalOnOverlay = function (e) { if (e.target === document.getElementById('toolModal')) closeModal(); };
+
+    function showView(id) {
+      ['createView', 'editSearchView', 'editView', 'viewRecordView', 'deleteView', 'createDetailView', 'editDetailView'].forEach(v => {
+        document.getElementById(v).classList.add('hidden');
+        document.getElementById(v).classList.remove('active');
+      });
+      document.getElementById(id).classList.remove('hidden');
+      document.getElementById(id).classList.add('active');
+      document.getElementById('actionPopup').classList.remove('hidden');
+      document.getElementById('actionPopup').classList.add('open');
+    }
+
+    window.hideActionPopup = function () {
+      document.getElementById('actionPopup').classList.add('hidden');
+      document.getElementById('actionPopup').classList.remove('open');
+    };
+
+    window.closePopupOnOverlay = function (e) { if (e.target === document.getElementById('actionPopup')) hideActionPopup(); };
+
+    // ─── TABLE ───
+    function flatten(v) { if (v == null) return ''; if (Array.isArray(v)) return v.map(flatten).join(' '); if (typeof v === 'object') return Object.values(v).map(flatten).join(' '); return String(v); }
+    function matches(rec, q) { if (!q || !q.trim()) return true; return flatten(rec).toLowerCase().includes(q.trim().toLowerCase()); }
+    function hl(text, q) {
+      const s = escHTML(text); if (!q || !q.trim()) return s;
+      const re = new RegExp(`(${q.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+      return s.replace(re, '<mark>$1</mark>');
+    }
+
+    window.renderTable = function () {
+      const tbody = document.getElementById('modalTableBody');
+      const records = (loadRecords()[activeTool] || []).filter(r => matches(r, tableFilterText));
+      if (!records.length) {
+        tbody.innerHTML = `<tr class="empty-row"><td colspan="7">No records found. Create one to get started.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = records.map(r => {
+        const atts = (r.attachments || []).map(f => `<a class="attach-link" href="#" onclick="downloadFile(event,'${escHTML(f.url)}','${escHTML(f.name)}')" title="${escHTML(f.name)}">📎 <span class="attach-name">${hl(f.name, tableFilterText)}</span></a>`).join('');
+        return `<tr>
+        <td><span class="date-chip">${hl(r.date, tableFilterText)}</span></td>
+        <td><span class="mono-val">${hl(r.partNo, tableFilterText)}</span></td>
+        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escHTML(r.description)}">${hl(r.description, tableFilterText)}</td>
+        <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escHTML(r.toolDescription)}">${hl(r.toolDescription, tableFilterText)}</td>
+        <td><span class="customer-pill">${hl(r.customerName, tableFilterText)}</span></td>
+        <td>${atts || '<span style="color:var(--text-subtle)">—</span>'}</td>
+        <td><div class="action-btns">
+          <button class="btn btn-ghost btn-sm" onclick="viewRecord('${r.id}')" title="View">👁</button>
+          <button class="btn btn-ghost btn-sm" onclick="editRecordDirect('${r.id}')" title="Edit">✎</button>
+        </div></td>
+      </tr>`;
+      }).join('');
+      attachSFXListeners();
+    };
+
+    window.searchRecords = function () { tableFilterText = document.getElementById('tableSearchInput').value; renderTable(); };
+    window.handleAction = function (a) { if (a === 'Report') downloadReport(); };
+
+    // ─── CRUD ───
+    window.showCreateForm = function () {
+      document.getElementById('createForm').reset();
+      document.getElementById('createFormTitle').textContent = `Create ${activeTool} Record`;
+      const g = document.getElementById('existingAttachmentsGroup'); if (g) g.style.display = 'none';
+      showView('createView');
+    };
+
+    async function b64Files(filesList) {
+      const out = [];
+      for (const file of Array.from(filesList || [])) {
+        const url = await new Promise(res => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = () => res(''); r.readAsDataURL(file); });
+        if (url) out.push({ name: file.name, type: file.type || 'application/octet-stream', size: file.size, url });
+      }
+      return out;
+    }
+
+    window.submitCreate = async function (e) {
+      e.preventDefault();
+      if (!confirm("Save this record?")) return;
+      const fd = new FormData(e.target);
+      const id = uid();
+      const partNo = fd.get('partNo');
+      const files = e.target.querySelector('input[type="file"]')?.files;
+      const localAtts = await b64Files(files);
+      const rec = { id, date: fd.get('date'), partNo, description: fd.get('description'), toolDescription: fd.get('toolDescription'), customerName: fd.get('customerName'), attachments: localAtts, details: [] };
+      const records = loadRecords(); records[activeTool].push(rec); saveRecords(records);
+      hideActionPopup(); renderTable();
+      playSound('success');
+      // Optimistically push to Firestore immediately; if files need uploading do that in background
+      (async () => { try { if (files?.length && isFBStorage()) { const up = await uploadAttachments(activeTool, id, files); const recs = loadRecords(); const r = recs[activeTool].find(x => x.id === id); if (r) { r.attachments = up; saveRecords(recs); renderTable(); fbSave(activeTool, r); } } else { fbSave(activeTool, rec); } } catch (e) { console.warn("BG save fail:", e); } })();
+    };
+
+    window.viewRecord = function (id) {
+      selectedRecordId = id;
+      const rec = loadRecords()[activeTool]?.find(r => r.id === id);
+      if (!rec) return;
+      document.getElementById('viewRecordTitle').textContent = rec.description || `Record: ${rec.partNo}`;
+      document.getElementById('viewRecordMeta').innerHTML = `
+      <div class="meta-card"><div class="meta-label">Tool No</div><div class="meta-val"><span class="mono-val">${escHTML(rec.partNo)}</span></div></div>
+      <div class="meta-card"><div class="meta-label">Date</div><div class="meta-val">${escHTML(rec.date)}</div></div>
+      <div class="meta-card"><div class="meta-label">Customer</div><div class="meta-val">${escHTML(rec.customerName)}</div></div>
+      <div class="meta-card" style="grid-column:1/-1"><div class="meta-label">Tool Description</div><div class="meta-val" style="white-space:normal;line-height:1.5;">${escHTML(rec.toolDescription)}</div></div>
+    `;
+      const atts = rec.attachments || [];
+      document.getElementById('viewRecordAttachments').innerHTML = atts.length ? `<div class="meta-label" style="margin-bottom:6px;">Attachments</div><div class="attach-row">${atts.map(f => `<a class="attach-link" href="#" onclick="downloadFile(event,'${escHTML(f.url)}','${escHTML(f.name)}')" title="${escHTML(f.name)}">📎 <span class="attach-name">${escHTML(f.name)}</span></a>`).join('')}</div>` : '';
+      renderDetailsTable(rec);
+      showView('viewRecordView');
+    };
+
+    window.renderDetailsTable = function (record) {
+      const tbody = document.getElementById('detailsTableBody');
+      const details = record.details || [];
+      if (!details.length) { tbody.innerHTML = `<tr class="empty-row"><td colspan="8">No part details yet. Add one above.</td></tr>`; return; }
+      tbody.innerHTML = details.map(d => {
+        const atts = (d.attachments || []).map(f => `<a class="attach-link" href="#" onclick="downloadFile(event,'${escHTML(f.url)}','${escHTML(f.name)}')" title="${escHTML(f.name)}">📎 <span class="attach-name">${escHTML(f.name)}</span></a>`).join('');
+        return `<tr>
+        <td><span class="mono-val">${escHTML(d.partNo)}</span></td>
+        <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escHTML(d.description)}">${escHTML(d.description)}</td>
+        <td>${escHTML(d.size || '')}</td>
+        <td>${escHTML(d.material || '')}</td>
+        <td>${escHTML(d.qty || '')}</td>
+        <td>${escHTML(d.supplierName || '')}</td>
+        <td>${atts || '<span style="color:var(--text-subtle)">—</span>'}</td>
+        <td><div class="action-btns">
+          <button class="btn btn-ghost btn-sm" onclick="editDetail('${d.id}')">✎</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteDetail('${d.id}')">🗑</button>
+        </div></td>
+      </tr>`;
+      }).join('');
+      attachSFXListeners();
+    };
+
+    window.showCreateDetailForm = function () { document.getElementById('createDetailForm').reset(); showView('createDetailView'); };
+
+    window.submitCreateDetail = async function (e) {
+      e.preventDefault();
+      if (!confirm("Save this detail?")) return;
+      const fd = new FormData(e.target);
+      const id = uid();
+      const partNo = fd.get('partNo');
+      const files = e.target.querySelector('input[type="file"]')?.files;
+      const localAtts = await b64Files(files);
+      const detail = { id, partNo, description: fd.get('description'), material: fd.get('material'), size: fd.get('size'), qty: fd.get('qty'), supplierName: fd.get('supplierName'), attachments: localAtts };
+      const recs = loadRecords();
+      const idx = recs[activeTool].findIndex(r => r.id === selectedRecordId);
+      if (idx === -1) return;
+      if (!recs[activeTool][idx].details) recs[activeTool][idx].details = [];
+      recs[activeTool][idx].details.push(detail);
+      saveRecords(recs);
+      viewRecord(selectedRecordId);
+      playSound('success');
+      (async () => { try { if (files?.length && isFBStorage()) { const up = await uploadAttachments(activeTool, id, files); const r2 = loadRecords(); const ri = r2[activeTool].findIndex(x => x.id === selectedRecordId); if (ri !== -1) { const di = r2[activeTool][ri].details.findIndex(d => d.id === id); if (di !== -1) { r2[activeTool][ri].details[di].attachments = up; saveRecords(r2); viewRecord(selectedRecordId); fbSave(activeTool, r2[activeTool][ri]); } } } else { fbSave(activeTool, recs[activeTool][idx]); } } catch (e) { console.warn("BG detail upload fail:", e); } })();
+    };
+
+    window.editDetail = function (detailId) {
+      const rec = loadRecords()[activeTool]?.find(r => r.id === selectedRecordId);
+      if (!rec) return;
+      const d = rec.details?.find(x => x.id === detailId);
+      if (!d) return;
+      const form = document.getElementById('editDetailForm');
+      form.elements['detailId'].value = d.id;
+      form.elements['partNo'].value = d.partNo || '';
+      form.elements['description'].value = d.description || '';
+      form.elements['material'].value = d.material || '';
+      form.elements['size'].value = d.size || '';
+      form.elements['qty'].value = d.qty || '';
+      form.elements['supplierName'].value = d.supplierName || '';
+      const fi = form.querySelector('input[type="file"]'); if (fi) fi.value = '';
+      const g = document.getElementById('existingDetailAttachmentsGroup');
+      const l = document.getElementById('editDetailFormExistingAttachments');
+      const atts = d.attachments || [];
+      if (atts.length) { g.style.display = 'block'; document.getElementById('existingDetailAttachmentsCountLabel').textContent = `Existing (${atts.length})`; l.innerHTML = atts.map((f, i) => `<div class="attach-edit-chip">📎 ${escHTML(f.name)} <button type="button" class="remove-attach-btn" onclick="removeExistingDetailAttachment('${d.id}',${i})">✕</button></div>`).join(''); } else { g.style.display = 'none'; l.innerHTML = ''; }
+      showView('editDetailView');
+    };
+
+    window.submitEditDetail = async function (e) {
+      e.preventDefault();
+      if (!confirm("Update this detail?")) return;
+      const fd = new FormData(e.target);
+      const detailId = fd.get('detailId');
+      const partNo = fd.get('partNo');
+      const recs = loadRecords();
+      const ri = recs[activeTool].findIndex(r => r.id === selectedRecordId);
+      if (ri === -1) return;
+      const details = recs[activeTool][ri].details;
+      if (!details) return;
+      const di = details.findIndex(d => d.id === detailId);
+      if (di === -1) return;
+      const existing = details[di].attachments || [];
+      const files = e.target.querySelector('input[type="file"]')?.files;
+      const newLocal = await b64Files(files);
+      details[di] = { id: detailId, partNo, description: fd.get('description'), material: fd.get('material'), size: fd.get('size'), qty: fd.get('qty'), supplierName: fd.get('supplierName'), attachments: [...existing, ...newLocal] };
+      saveRecords(recs);
+      viewRecord(selectedRecordId);
+      playSound('success');
+      (async () => { try { if (files?.length && isFBStorage()) { const up = await uploadAttachments(activeTool, detailId, files, existing); const r2 = loadRecords(); const ri2 = r2[activeTool].findIndex(r => r.id === selectedRecordId); if (ri2 !== -1) { const di2 = r2[activeTool][ri2].details.findIndex(d => d.id === detailId); if (di2 !== -1) { r2[activeTool][ri2].details[di2].attachments = up; saveRecords(r2); viewRecord(selectedRecordId); fbSave(activeTool, r2[activeTool][ri2]); } } } else { fbSave(activeTool, recs[activeTool][ri]); } } catch (e) { console.warn("BG edit detail fail:", e); } })();
+    };
+
+    window.deleteDetail = async function (detailId) {
+      const rec = loadRecords()[activeTool]?.find(r => r.id === selectedRecordId);
+      const d = rec?.details?.find(x => x.id === detailId);
+      const partNo = d ? d.partNo : 'unknown';
+      if (!confirm("Delete this detail permanently?")) return;
+      const recs = loadRecords();
+      const ri = recs[activeTool].findIndex(r => r.id === selectedRecordId);
+      if (ri === -1) return;
+      recs[activeTool][ri].details = recs[activeTool][ri].details.filter(d => d.id !== detailId);
+      saveRecords(recs);
+      viewRecord(selectedRecordId);
+      playSound('error');
+      fbSave(activeTool, recs[activeTool][ri]);
+    };
+
+    window.editRecordDirect = function (id) {
+      const rec = loadRecords()[activeTool]?.find(r => r.id === id);
+      if (!rec) return;
+      editingRecordId = id;
+      const form = document.getElementById('editForm');
+      form.elements['date'].value = rec.date;
+      form.elements['partNo'].value = rec.partNo;
+      form.elements['description'].value = rec.description;
+      form.elements['toolDescription'].value = rec.toolDescription || '';
+      form.elements['customerName'].value = rec.customerName;
+      form.elements['recordId'].value = rec.id;
+      const fi = form.querySelector('input[type="file"]'); if (fi) fi.value = '';
+      const g = document.getElementById('existingAttachmentsGroup');
+      const l = document.getElementById('editFormExistingAttachments');
+      const atts = rec.attachments || [];
+      if (atts.length) { g.style.display = 'block'; document.getElementById('existingAttachmentsCountLabel').textContent = `Existing (${atts.length})`; l.innerHTML = atts.map((f, i) => `<div class="attach-edit-chip">📎 ${escHTML(f.name)} <button type="button" class="remove-attach-btn" onclick="removeExistingAttachment(${i})">✕</button></div>`).join(''); } else { g.style.display = 'none'; l.innerHTML = ''; }
+      document.getElementById('editFormTitle').textContent = `Edit Record: ${rec.partNo}`;
+      showView('editView');
+    };
+
+    window.submitEdit = async function (e) {
+      e.preventDefault();
+      if (!confirm("Update this record?")) return;
+      const fd = new FormData(e.target);
+      const id = fd.get('recordId') || editingRecordId;
+      const partNo = fd.get('partNo');
+      const recs = loadRecords();
+      const idx = recs[activeTool].findIndex(r => r.id === id);
+      if (idx === -1) return;
+      const existing = recs[activeTool][idx].attachments || [];
+      const existingDetails = recs[activeTool][idx].details || [];
+      const files = e.target.querySelector('input[type="file"]')?.files;
+      const newLocal = await b64Files(files);
+      const tempRec = { id, date: fd.get('date'), partNo, description: fd.get('description'), toolDescription: fd.get('toolDescription'), customerName: fd.get('customerName'), attachments: [...existing, ...newLocal], details: existingDetails };
+      recs[activeTool][idx] = tempRec;
+      saveRecords(recs);
+      hideActionPopup(); renderTable();
+      playSound('success');
+      (async () => { try { if (files?.length && isFBStorage()) { const up = await uploadAttachments(activeTool, id, files, existing); const r2 = loadRecords(); const r = r2[activeTool].find(x => x.id === id); if (r) { r.attachments = up; saveRecords(r2); renderTable(); fbSave(activeTool, r); } } else { fbSave(activeTool, tempRec); } } catch (e) { console.warn("BG edit sync fail:", e); } })();
+    };
+
+    window.deleteRecordDirect = async function (id) {
+      const rec = loadRecords()[activeTool]?.find(r => r.id === id);
+      const partNo = rec ? rec.partNo : 'unknown';
+      if (!confirm("Permanently delete this record?")) return;
+      const recs = loadRecords();
+      recs[activeTool] = recs[activeTool].filter(r => r.id !== id);
+      saveRecords(recs);
+      hideActionPopup(); renderTable();
+      playSound('error');
+      fbDelete(activeTool, id);
+    };
+
+    window.deleteEditedRecord = async function () {
+      const id = document.getElementById('editForm').elements['recordId']?.value || editingRecordId;
+      if (id) await deleteRecordDirect(id);
+    };
+
+    window.removeExistingAttachment = function (idx) {
+      if (!confirm("Remove this attachment?")) return;
+      const recs = loadRecords();
+      const rec = recs[activeTool].find(r => r.id === editingRecordId);
+      if (!rec || !rec.attachments) return;
+      rec.attachments.splice(idx, 1);
+      saveRecords(recs, false);
+      const form = document.getElementById('editForm');
+      const g = document.getElementById('existingAttachmentsGroup');
+      const l = document.getElementById('editFormExistingAttachments');
+      const atts = rec.attachments || [];
+      if (atts.length) { g.style.display = 'block'; document.getElementById('existingAttachmentsCountLabel').textContent = `Existing (${atts.length})`; l.innerHTML = atts.map((f, i) => `<div class="attach-edit-chip">📎 ${escHTML(f.name)} <button type="button" class="remove-attach-btn" onclick="removeExistingAttachment(${i})">✕</button></div>`).join(''); } else { g.style.display = 'none'; l.innerHTML = ''; }
+      renderTable();
+    };
+
+    window.removeExistingDetailAttachment = function (detailId, idx) {
+      if (!confirm("Remove this attachment?")) return;
+      const recs = loadRecords();
+      const ri = recs[activeTool].findIndex(r => r.id === selectedRecordId);
+      if (ri === -1) return;
+      const di = recs[activeTool][ri].details.findIndex(d => d.id === detailId);
+      if (di === -1) return;
+      const detail = recs[activeTool][ri].details[di];
+      if (!detail.attachments) return;
+      detail.attachments.splice(idx, 1);
+      saveRecords(recs, false);
+      const g = document.getElementById('existingDetailAttachmentsGroup');
+      const l = document.getElementById('editDetailFormExistingAttachments');
+      const atts = detail.attachments;
+      if (atts.length) { g.style.display = 'block'; document.getElementById('existingDetailAttachmentsCountLabel').textContent = `Existing (${atts.length})`; l.innerHTML = atts.map((f, i) => `<div class="attach-edit-chip">📎 ${escHTML(f.name)} <button type="button" class="remove-attach-btn" onclick="removeExistingDetailAttachment('${detailId}',${i})">✕</button></div>`).join(''); } else { g.style.display = 'none'; l.innerHTML = ''; }
+      viewRecord(selectedRecordId);
+    };
+
+    window.searchForEdit = function () {
+      const q = document.getElementById('editSearchInput').value.trim().toLowerCase();
+      const msg = document.getElementById('editSearchMessage');
+      const rec = loadRecords()[activeTool]?.find(r => r.partNo.toLowerCase() === q);
+      if (rec) { msg.textContent = ''; editRecordDirect(rec.id); }
+      else { msg.className = 'search-message error'; msg.textContent = 'Tool No not found.'; }
+    };
+
+    window.confirmDelete = async function () {
+      const q = document.getElementById('deleteInput').value.trim().toLowerCase();
+      const msg = document.getElementById('deleteMessage');
+      const rec = loadRecords()[activeTool]?.find(r => r.partNo.toLowerCase() === q);
+      if (rec) { await deleteRecordDirect(rec.id); hideActionPopup(); }
+      else { msg.className = 'search-message error'; msg.textContent = 'Tool No not found.'; }
+    };
+
+    window.downloadFile = async function (e, url, name) {
+      if (e) e.preventDefault();
+      try {
+        if (url.startsWith('data:')) { const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); document.body.removeChild(a); return; }
+        const blob = await fetch(url).then(r => r.blob());
+        const burl = window.URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = burl; a.download = name; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        window.URL.revokeObjectURL(burl);
+      } catch (err) { window.open(url, '_blank'); }
+    };
+
+    function dlCSV(filename, rows) {
+      const csv = rows.map(r => r.map(escCSV).join(',')).join('\n') + '\n';
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }
+
+    window.downloadReport = function () {
+      const recs = loadRecords()[activeTool];
+      if (!recs || !recs.length) { alert("No records to export."); return; }
+      const rows = [['Date', 'Tool No', 'Part Description', 'Tool Description', 'Customer Name', 'Attachments'], ...recs.map(r => [r.date, r.partNo, r.description, r.toolDescription, r.customerName, (r.attachments || []).map(f => f.name).join('; ')])];
+      dlCSV(`${activeTool.replace(/\s+/g, '_')}_Report_${new Date().toISOString().split('T')[0]}.csv`, rows);
+      hudLog("ACTION", `Exported active ${activeTool} database to CSV file.`);
+      playSound('success');
+    };
+
+    window.downloadCurrentRecord = function () {
+      const recs = loadRecords()[activeTool] || [];
+      const rec = recs.find(r => r.id === selectedRecordId);
+      if (!rec) { alert("No record selected."); return; }
+      const rows = [['Date', 'Tool No', 'Part Description', 'Tool Description', 'Customer', 'Attachments', 'Part No', 'Part Desc', 'Material', 'Size', 'Qty', 'Supplier']];
+      const atts = (rec.attachments || []).map(f => f.name).join('; ');
+      const details = rec.details || [];
+      if (!details.length) { rows.push([rec.date, rec.partNo, rec.description, rec.toolDescription, rec.customerName, atts, '', '', '', '', '', '']); }
+      else { details.forEach(d => rows.push([rec.date, rec.partNo, rec.description, rec.toolDescription, rec.customerName, atts, d.partNo, d.description, d.material, d.size, d.qty, d.supplierName])); }
+      dlCSV(`${activeTool.replace(/\s+/g, '_')}_${String(rec.partNo || 'Record').replace(/[^a-z0-9_-]+/gi, '_')}_${new Date().toISOString().split('T')[0]}.csv`, rows);
+      hudLog("ACTION", `Exported individual record [${rec.partNo}] part specifications to CSV.`);
+      playSound('success');
+    };
+
+    // firebase-ready fires from the module script above; also call init now in case
+    // the module already ran before this script was parsed (e.g. cached page)
+    window.addEventListener('firebase-ready', init, { once: true });
+    
+    // Handle network status for better sync
+    window.addEventListener('online', () => {
+      console.log('[NET] Online - resuming sync');
+      if (realtimeSyncStarted) {
+        Object.values(realtimeUnsubscribers).forEach(u => typeof u === 'function' && u());
+        realtimeUnsubscribers = {};
+        realtimeSyncStarted = false;
+      }
+      startRealtimeSync();
+    });
+    
+    window.addEventListener('offline', () => {
+      console.log('[NET] Offline - data retained locally');
+    });
+    
+    // Always call init synchronously so localStorage data shows immediately,
+    // then realtime sync attaches as soon as Firebase module resolves
+    init();
+  </script>
+</body>
+
+</html>
